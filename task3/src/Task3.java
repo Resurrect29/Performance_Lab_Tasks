@@ -11,6 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 public class Task3 {
 
     public void main(String[] args) throws IOException {
+
+        if(args.length < 3){
+            System.err.println("Укажите пути к файлам как аргументы");
+            return;
+        }
+
         String valuesFilePath = args[0];
         String testFilePath = args[1];
         String reportFilePath = args[2];

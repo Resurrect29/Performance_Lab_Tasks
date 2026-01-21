@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -6,36 +7,59 @@ import java.util.stream.IntStream;
 
 public class Task1 {
     public void main(String[] args) throws ExecutionException, InterruptedException {
-        int n, m1, m2;
-        Scanner scanner = new Scanner(System.in);
+        try{
+            int n, m1, m2;
+            Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Массив 1: ");
-        n = scanner.nextInt();
-        m1 = scanner.nextInt();
+            System.out.print("Массив 1: ");
+            n = scanner.nextInt();
+            m1 = scanner.nextInt();
 
-        List<Integer> list1 = IntStream.rangeClosed(1, n)
-                .boxed()
-                .toList();
+            if (n <= 0) {
+                System.err.println("Ошибка: размер массива должен быть > 0");
+                return;
+            }
+            if (m1 <= 0) {
+                System.err.println("Ошибка: шаг m1 должен быть > 0");
+                return;
+            }
 
-        System.out.print("Массив 2: ");
-        n = scanner.nextInt();
-        m2 = scanner.nextInt();
+            List<Integer> list1 = IntStream.rangeClosed(1, n)
+                    .boxed()
+                    .toList();
 
-        List<Integer> list2 = IntStream.rangeClosed(1, n)
-                .boxed()
-                .toList();
+            System.out.print("Массив 2: ");
+            n = scanner.nextInt();
+            m2 = scanner.nextInt();
 
-        FutureTask<StringBuilder> future1 = new FutureTask<>(() -> (circle(list1, m1)));
-        FutureTask<StringBuilder> future2 = new FutureTask<>(() -> (circle(list2, m2)));
+            if (n <= 0) {
+                System.err.println("Ошибка: размер массива должен быть > 0");
+                return;
+            }
+            if (m2 <= 0) {
+                System.err.println("Ошибка: шаг m1 должен быть > 0");
+                return;
+            }
 
-        new Thread(future1).start();
-        new Thread(future2).start();
+            List<Integer> list2 = IntStream.rangeClosed(1, n)
+                    .boxed()
+                    .toList();
 
-        StringBuilder result1 = future1.get();
-        StringBuilder result2 = future2.get();
+            FutureTask<StringBuilder> future1 = new FutureTask<>(() -> (circle(list1, m1)));
+            FutureTask<StringBuilder> future2 = new FutureTask<>(() -> (circle(list2, m2)));
 
-        System.out.print(result1.toString() + result2.toString());
+            new Thread(future1).start();
+            new Thread(future2).start();
 
+            StringBuilder result1 = future1.get();
+            StringBuilder result2 = future2.get();
+
+            System.out.print(result1.toString() + result2.toString());
+        } catch (NoSuchElementException e) {
+            System.err.println("Ошибка ввода: ожидалось целое число");
+        } catch (Exception e) {
+            System.err.println("Неожиданная ошибка: " + e.getMessage());
+        }
     }
 
     private StringBuilder circle(List<Integer> list, int m){
