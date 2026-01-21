@@ -5,6 +5,12 @@ import java.util.*;
 public class Task4 {
 
     public void main(String[] args) throws FileNotFoundException {
+
+        if(args.length < 1) {
+            System.err.println("Укажите путь к файлу как аргумент");
+            return;
+        }
+
         String filePath = args[0];
 
         File file = new File(filePath);
@@ -22,6 +28,11 @@ public class Task4 {
             } catch (NumberFormatException e) {
                 System.err.println("Некорректное число в строке: '" + line + "'");
             }
+        }
+
+        if (nums.isEmpty()) {
+            System.err.println("В файле нет корректных чисел");
+            return;
         }
 
         Collections.sort(nums);
